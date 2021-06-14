@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <ul id="user">
+    </ul>
+    <button id="get-data">Get data</button>
+    <button id="crate-data">Create</button>
+    <button id="update-data">Update</button>
+    <button id="dalete-data">Delete</button>
+
+    <script>
+        let getDataButton = document.querySelector('#get-data');
+        getDataButton.addEventListener('click', getData);
+
+
+        function showData(data) {
+            let ul = document.querySelector('#user');
+            data.forEach((val) => {
+                let el = document.createElement('li');
+                el.innerText = `User : ${val.first_name} ${val.last_name} | ${val.email} `;
+                ul.appendChild(el);
+
+            });
+        }
+
+
+        //fetch('http://localhost:3000/users')
+        //    .then(res => res.json())
+        //    .then(data => showData(data));
+
+
+        async function getData() {
+            let response = await fetch('http://localhost:3000/users');
+            let data = await response.json();
+            showData(data);
+        }
+
+        function createData() {
+            fetch('http://localhost:3000/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'Application/json'
+                    },
+                    body: JSON.stringify({
+                        "id": 6,
+                        "first_name": "Kritsana",
+                        "last_name": "Prasit",
+                        "email": "kritsana@gmail.com"
+                    })
+                })
+                .then(res => console.log(res))
+                .catch(err => console.log(err));
+        }
+
+        let createDataButton = document.querySelector('#crate-data');
+        createDataButton.addEventListener('click', createData);
+
+        function updateData() {
+            fetch('http://localhost:3000/users/6', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'Application/json'
+                    },
+                    body: JSON.stringify({
+                        "id": 6,
+                        "first_name": "bank",
+                        "last_name": "Prasit",
+                        "email": "bank@gmail.com"
+                    })
+                })
+                .then(res => console.log(res))
+                .catch(err => console.log(err));
+        }
+
+        let updateDataButton = document.querySelector('#update-data');
+        updateDataButton.addEventListener('click', updateData);
+
+
+
+        function daleteData() {
+            fetch('http://localhost:3000/users/6', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'Application/json'
+                    }
+                })
+                .then(res => console.log(res))
+                .catch(err => console.log(err));
+        }
+
+        let daleteDataButton = document.querySelector('#dalete-data');
+        daleteDataButton.addEventListener('click', daleteData);
+    </script>
+</body>
+
+</html>
